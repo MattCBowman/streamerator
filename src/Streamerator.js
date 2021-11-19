@@ -26,7 +26,7 @@ function Streamerator() {
   }
 
   const handleAddField = (field) => {
-    setSelectedFields(selectedFields => [...new Set([...selectedFields, field])].filter(f => f !== null));
+    setSelectedFields(selectedFields => [...new Set([...selectedFields, field])].filter(f => f !== null).sort());
   }
 
   const handleLocatorUrlChange = (event) => {
