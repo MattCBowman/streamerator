@@ -11,8 +11,12 @@ function parseFields(properties, namespace) {
         var subfields = [];
         if (value.type != null && 'structType' in value.type) {
             subfields = parseFields(value.type.structType.property, namespace + value.name + '.');
-        }  
-        fields.push({value: namespace + value.name, label: value.displayName, children:subfields});
+        }
+        let x = {value: namespace + value.name, label: value.displayName};
+        if (subfields.length > 0) {
+            x.children = subfields;
+        }
+        fields.push(x);
     }
     return fields;
 }

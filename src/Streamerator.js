@@ -35,27 +35,33 @@ function Streamerator() {
   }
 
   const handleExpanded = (expanded) => {
-    console.log(expanded);
     setExpanded(expanded);
   }
 
-  const eligibleFields = schemaparse(schema);
-  console.log(selectedFields);
+  const json = JSON.stringify(selectedFields, null, "  ");
 
   return (
     <div>
       <div>
         Locator Url:
-        <input type="text" className="w-96 space-x-4" name="locatorUrl" onChange={handleLocatorUrlChange} value={locatorUrl}></input>
+        <input type="text" name="locatorUrl" onChange={handleLocatorUrlChange} value={locatorUrl}></input>
         <input type="button" name="updateSchema" onClick={handleUpdateSchema} value="Update Schema"></input> 
       </div>
+      <p>
+        <textarea cols="50" rows="10" value={json}></textarea>  
+      </p>
+      <p>
       <CheckboxTree
-        nodes={eligibleFields}
+        nodes={schemaparse(schema)}
         checked={selectedFields}
         expanded={expanded}
-        onCheck={handleChecked}
+        onCheck={(checked) => handleChecked(checked)}
         onExpand={handleExpanded}
+        iconsClass="fa5"
+        checkModel="leaf"
+        showExpandAll={true}
       />
+      </p>
     </div>
   );
 }
