@@ -1,10 +1,11 @@
 import { render } from '@testing-library/react';
 import React, { useState } from 'react';
 import './App.css';
+import schemaparse from './schemaparse';
 
 function Streamerator() {
 
-  const [locatorUrl, setLocatorUrl] = useState("");
+  const [locatorUrl, setLocatorUrl] = useState("https://teamangus.mattcbowman.com/search");
   const [useCreds, setUseCreds] = useState(false);
   const [fields, setFields] = useState([]);
   const [schema, setSchema] = useState(null);
@@ -48,7 +49,7 @@ function Streamerator() {
       </div>
       <div>
         <pre>
-          {JSON.stringify(schema, null, "  ")}
+          {JSON.stringify(schemaparse(schema), null, "  ")}
         </pre>
       </div>
     </div>
