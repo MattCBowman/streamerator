@@ -1,8 +1,8 @@
 function schemaparse(schema) {
-    return parseFields(schema);
+    return parseFields(schema, "");
 }
 
-function parseFields(properties) {
+function parseFields(properties, namespace) {
     var fields = [] 
     if (properties == null) {
         return fields;
@@ -10,9 +10,10 @@ function parseFields(properties) {
     for (const [key, value] of Object.entries(properties)) {
         var subfields = [];
         if (value.type != null && 'structType' in value.type) {
-            subfields = parseFields(value.type.structType.property);
+            subfields = parseFields(value.type.structType.property, namespace + value.name + '.');
         }  
-        fields.push({name: value.name, displayName: value.displayName, type:value.typeId, subfields:subfields});
+        fields.push({name: namespace + value.name, displayName: value.displayName, type:value.typeId});
+        fields = fields.concat(subfields);
     }
     return fields;
 }
