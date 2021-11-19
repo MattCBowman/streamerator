@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import AddField from './AddField';
-import './App.css';
+import CheckboxTree from 'react-checkbox-tree';
 import schemaparse from './schemaparse';
 
 function Streamerator() {
@@ -8,6 +7,7 @@ function Streamerator() {
   const [locatorUrl, setLocatorUrl] = useState("https://teamangus.mattcbowman.com/search");
   const [schema, setSchema] = useState(null);
   const [selectedFields, setSelectedFields] = useState([]);
+  const [expanded, setExpanded] = useState([]);
 
   const handleUpdateSchema = () => {
     // request schema and set schema
@@ -25,32 +25,22 @@ function Streamerator() {
       });
   }
 
-  const handleAddField = (field) => {
-    setSelectedFields(selectedFields => [...new Set([...selectedFields, field])].filter(f => f !== null).sort());
-  }
-
   const handleLocatorUrlChange = (event) => {
     setLocatorUrl(event.target.value);
   }
 
-  const handleDeleteSelectedField = (field) => {
-    setSelectedFields(selectedFields => selectedFields.filter(f => f !== field));
+  const handleChecked = (checked) => {
+    console.log(checked);
+    setSelectedFields(checked);
   }
 
-  const getFieldForFieldName = (efs, name) => { 
-    return efs.find(ef => ef.name === name);
-  };
+  const handleExpanded = (expanded) => {
+    console.log(expanded);
+    setExpanded(expanded);
+  }
 
   const eligibleFields = schemaparse(schema);
-
-  const selectedFieldDisplay = selectedFields
-    .map(field => getFieldForFieldName(eligibleFields, field))
-    .map(field => (
-      <li key={field}>
-        <input type="button" value="Delete" onClick={() => handleDeleteSelectedField(field.name)}></input>&nbsp;
-        {field.displayName} ({field.name})
-      </li>
-    ));
+  console.log(selectedFields);
 
   return (
     <div>
@@ -59,13 +49,13 @@ function Streamerator() {
         <input type="text" className="w-96 space-x-4" name="locatorUrl" onChange={handleLocatorUrlChange} value={locatorUrl}></input>
         <input type="button" name="updateSchema" onClick={handleUpdateSchema} value="Update Schema"></input> 
       </div>
-      <div>
-        <AddField fields={eligibleFields} onAddField={handleAddField}></AddField>
-      </div>
-      <h2>Selected fields</h2>
-      <ul>
-        {selectedFieldDisplay}
-      </ul>
+      <CheckboxTree
+        nodes={eligibleFields}
+        checked={selectedFields}
+        expanded={expanded}
+        onCheck={handleChecked}
+        onExpand={handleExpanded}
+      />
     </div>
   );
 }

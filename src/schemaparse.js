@@ -12,7 +12,7 @@ function parseFields(properties, namespace) {
         if (value.type != null && 'structType' in value.type) {
             subfields = parseFields(value.type.structType.property, namespace + value.name + '.');
         }  
-        fields.push({name: namespace + value.name, displayName: value.displayName, type:value.typeId, subfields:subfields});
+        fields.push({value: namespace + value.name, label: value.displayName, children:subfields});
     }
     return fields;
 }
