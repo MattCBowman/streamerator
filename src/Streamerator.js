@@ -5,6 +5,7 @@ import './App.css';
 function Streamerator() {
 
   const [locatorUrl, setLocatorUrl] = useState("");
+  const [useCreds, setUseCreds] = useState(false);
   const [fields, setFields] = useState([]);
   const [schema, setSchema] = useState(null);
 
@@ -13,6 +14,12 @@ function Streamerator() {
     var headers = new Headers();
 
     headers.append('accept', 'application/json');
+
+    if (useCreds) {
+      console.log("Using creds");
+      headers.append("Authorization", "Basic " + btoa("test:test"));
+    }
+
     fetch(locatorUrl, { headers: headers })
       .then((response) => response.json())
       .then((responseJson) => {
@@ -33,11 +40,15 @@ function Streamerator() {
       <div>
         Locator Url:
         <input type="text" className="w-96 space-x-4" onChange={handleLocatorUrlChange} value={locatorUrl}></input>
+        <br/>
+        <input type="checkbox" checked={useCreds} onClick={(e) => setUseCreds(e.target.checked)}></input> Use credentials
+        <br/>
         <input type="button" name="updateUrl" onClick={handleUrlUpdate} value="Update URL"></input> 
+
       </div>
       <div>
         <pre>
-          {JSON.stringify(schema)}
+          {JSON.stringify(schema, null, "  ")}
         </pre>
       </div>
     </div>
