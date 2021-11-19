@@ -1,13 +1,19 @@
 function schemaparse(schema) {
-    var fields = []
-    if (schema == null) {
+    return parseFields(schema);
+}
+
+function parseFields(properties) {
+    var fields = [] 
+    if (properties == null) {
         return fields;
     }
-
-    for (const [key, value] of Object.entries(schema)) {
-        fields.push({name: value.name, displayName: value.displayName, type:value.typeId});
+    for (const [key, value] of Object.entries(properties)) {
+        var subfields = [];
+        if (value.type != null && 'structType' in value.type) {
+            subfields = parseFields(value.type.structType.property);
+        }  
+        fields.push({name: value.name, displayName: value.displayName, type:value.typeId, subfields:subfields});
     }
-    
     return fields;
 }
 
