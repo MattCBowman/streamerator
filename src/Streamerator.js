@@ -10,7 +10,17 @@ function Streamerator() {
 
   const handleUrlUpdate = () => {
     // request schema and set schema
-    console.log("Handling Update URL Click: " + locatorUrl);
+    var headers = new Headers();
+
+    headers.append('accept', 'application/json');
+    fetch(locatorUrl, { headers: headers })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        setSchema(responseJson.schema);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   const handleLocatorUrlChange = (event) => {
@@ -20,9 +30,16 @@ function Streamerator() {
     
   return (
     <div>
-      Locator Url:
-      <input type="text" onChange={handleLocatorUrlChange} value={locatorUrl}></input>
-      <input type="button" name="updateUrl" onClick={handleUrlUpdate} value="Update URL"></input> 
+      <div>
+        Locator Url:
+        <input type="text" className="w-96 space-x-4" onChange={handleLocatorUrlChange} value={locatorUrl}></input>
+        <input type="button" name="updateUrl" onClick={handleUrlUpdate} value="Update URL"></input> 
+      </div>
+      <div>
+        <pre>
+          {JSON.stringify(schema)}
+        </pre>
+      </div>
     </div>
   );
 }
