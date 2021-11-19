@@ -37,17 +37,20 @@ function Streamerator() {
     setSelectedFields(selectedFields => selectedFields.filter(f => f !== field));
   }
 
-  const selectedFieldDisplay = selectedFields.map(field => (
-    <li key={field}>
-      {field}&nbsp;
-      <input type="button" value="Delete" onClick={() => handleDeleteSelectedField(field)}></input>
-    </li>
-  ));
+  const getFieldForFieldName = (efs, name) => { 
+    return efs.find(ef => ef.name === name);
+  };
 
   const eligibleFields = schemaparse(schema);
-  // const eligibleFields = schemaparse(schema).filter(f => {
-  //   return selectedFields.indexOf(f.name) > -1;
-  // });
+
+  const selectedFieldDisplay = selectedFields
+    .map(field => getFieldForFieldName(eligibleFields, field))
+    .map(field => (
+      <li key={field}>
+        <input type="button" value="Delete" onClick={() => handleDeleteSelectedField(field.name)}></input>&nbsp;
+        {field.displayName} ({field.name})
+      </li>
+    ));
 
   return (
     <div>
